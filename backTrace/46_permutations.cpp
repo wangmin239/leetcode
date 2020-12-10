@@ -31,17 +31,17 @@ public:
 class Solution {
 public:
     void backtrack(vector<vector<int>>& res, vector<int>& output, int first, int len){
-        // 所有数都填完了
+        /* get the correct result */
         if (first == len) {
             res.emplace_back(output);
             return;
         }
         for (int i = first; i < len; ++i) {
-            // 动态维护数组
+            /* dynamically maintain the array */
             swap(output[i], output[first]);
-            // 继续递归填下一个数
+            /* process the next step */
             backtrack(res, output, first + 1, len);
-            // 撤销操作
+            /* cancel the last operation */
             swap(output[i], output[first]);
         }
     }
