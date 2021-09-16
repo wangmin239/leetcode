@@ -1,3 +1,4 @@
+/* The first method. */
 constexpr int dir[4][2] = {1,0, 0,1, -1,0, 0,-1};
 
 class dt{
@@ -49,7 +50,7 @@ public:
 };
 
 
-
+/* The second method. */
 
 struct TrieNode {
     string word;
@@ -119,7 +120,7 @@ public:
     }
 };
 
-
+/* The third method. */
 struct TrieNode {
     string word;
     unordered_map<char,TrieNode *> children;
@@ -186,4 +187,71 @@ public:
         }
         return ans;        
     }
+};
+
+/* The forth method. */
+
+class Solution {
+public:
+	int d_col[4] = { 0,1,0,-1 };
+	int d_row[4] = { -1,0,1,0 };
+public:
+	vector<string> findWords (vector<vector<char>>& board, vector<string>& words) {
+		map<char, vector<int>> charMap;
+		for(int i = 0; i < board.size (); i++) {
+			for(int j = 0; j < board[0].size (); j++) {
+				charMap[board[i][j]].push_back (i * board[0].size () + j);
+			}
+		}
+
+		vector<string> ans;
+		for(int i = 0; i < words.size (); i++) {
+			int var1 = canMatch (words[i], charMap);
+			if(var1 == -1)continue;
+			for(int number : charMap[words[i][var1]]) {
+				set<char> isMatched;
+				isMatched.insert (number);
+				int matchWay = var1 == 0 ? 1 : -1;
+				if(dfs (words[i], var1, isMatched, board, number, matchWay)) {
+					ans.push_back (words[i]);
+					break;
+				}
+			}
+		}
+
+		return ans;
+	}
+
+	//-1代表不行，0代表建议从头匹配，返回 字符串长度减一 代表建议从尾匹配
+	int canMatch (string& s, map<char, vector<int>>& charMap) {
+		map<char, int> mapCnt;
+		int size = s.size ();
+		for(int i = 0; i < size; i++) {
+			mapCnt[s[i]]++;
+		}
+		for(map<char, int>::iterator iter = mapCnt.begin (); iter != mapCnt.end (); iter++) {
+			if(charMap.find (iter->first) == charMap.end ())return -1;
+			if(iter->second > charMap[iter->first].size ())return -1;
+		}
+		return charMap[s[0]].size() < charMap[s[size - 1]].size() ? 0 : size - 1;
+	}
+
+	bool dfs (string& word, int index, set<char>& isMatched, vector<vector<char>>& board, int number, int matchWay) {
+		if(index == (matchWay == 1 ? word.length () - 1 : 0))return true;
+
+		int row = number / board[0].size ();
+		int col = number - row * board[0].size ();
+		for(int i = 0; i < 4; i++) {
+			int row1 = row + d_row[i], col1 = col + d_col[i];
+			int number1 = row1 * board[0].size () + col1;
+			if(isMatched.find (number1) != isMatched.end ())continue;
+			if(row1 < 0 || row1 >= board.size () || col1 < 0 || col1 >= board[0].size () || word[index + matchWay] != board[row1][col1])continue;
+
+			isMatched.insert (number1);
+			if(dfs (word, index + matchWay, isMatched, board, number1, matchWay))return true;
+			isMatched.erase (number1);
+		}
+
+		return false;
+	}
 };
