@@ -120,3 +120,28 @@ public:
         return res;
     }
 };
+
+
+
+class Solution {
+public:
+    vector<int> preorder(Node* root) {
+        vector<int> ans;
+        stack<Node*> st;
+        
+        while (root != nullptr || st.empty() == false) {
+            if (root != nullptr) {
+                ans.push_back(root->val);
+                for (auto iter = root->children.rbegin(); iter != root->children.rend(); ++iter) {
+                    st.push(*iter);
+                }
+                root = nullptr;
+            } else {
+                root = st.top();
+                st.pop();
+            }
+        }
+        
+        return ans;
+    }
+};
