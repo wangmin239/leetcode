@@ -49,15 +49,6 @@ public:
 };
 
 
-Line 19: Char 15: error: no matching function for call to 'strtok'
-        pch = strtok(sentence.c_str(), " ");
-              ^~~~~~
-/usr/include/string.h:336:14: note: candidate function not viable: 1st argument ('const char *') would lose const qualifier
-extern char *strtok (char *__restrict __s, const char *__restrict __delim)
-             ^
-1 error generated.
-
-
 class Solution {
 public:
     string toGoatLatin(string sentence) {
