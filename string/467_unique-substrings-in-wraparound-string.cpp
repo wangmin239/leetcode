@@ -11,10 +11,9 @@ public:
             for (int j = i; j < len; j++) {
                 tmp.push_back(p[j]);
                 auto size = tmp.size();
-                auto start = 0;
-
-                if (size > 26) {
-                    start = size / 26 * 26;
+                auto start = (size - 1)/26 * 26;
+                
+                if (size % 26 == 1) {
                     if (tmp[0] != tmp[start]) {
                         break;
                     }
@@ -27,9 +26,6 @@ public:
                 if (strMap.count(tmp) > 0) {
                     continue;
                 }
-                
-                
-                
                 ++strMap[tmp];
                 
                 if (tmp.length() <= 26) {
@@ -40,6 +36,7 @@ public:
         return strMap.size();
     }
 };
+
 
 class Solution {
 public:
