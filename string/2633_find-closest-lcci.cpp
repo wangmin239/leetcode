@@ -1,0 +1,58 @@
+class Solution {
+public:
+    int findClosest(vector<string>& words, string word1, string word2) {
+        auto getSequences = [] (auto& words, auto pattern, auto& result) {
+          for (int i = 0; i < words.size(); i++) {
+            if (words[i] == pattern) {
+                result.push_back(i);
+            }
+          }
+          return;
+        };
+        
+        vector<int> word1Seq;
+        vector<int> word2Seq;
+        
+        getSequences(words, word1, word1Seq);
+        getSequences(words, word2, word2Seq);
+        
+        return getMinDistance(word1Seq, word2Seq);
+    }
+    
+  
+    int getMinDistance(const vector<int>& seq1, const vector<int>& seq2) {
+        int minDist = INT_MAX;
+        
+        for (const auto i : seq1) {
+            for (const auto j : seq2) {
+                minDist = min(abs(i -j), minDist);
+            }
+        }
+        return minDist;
+    }
+    
+
+};
+
+
+class Solution {
+public:
+    int findClosest(vector<string>& words, string word1, string word2) {
+        int length = words.size();
+        int ans = length;
+        int index1 = -1, index2 = -1;
+        for (int i = 0; i < length; i++) {
+            string word = words[i];
+            if (words[i] == word1) {
+                index1 = i;
+            } else if (words[i] == word2) {
+                index2 = i;
+            }
+            if (index1 >= 0 && index2 >= 0) {
+                ans = min(ans, abs(index1 - index2));
+            }
+        }
+        return ans;
+    }
+};
+
