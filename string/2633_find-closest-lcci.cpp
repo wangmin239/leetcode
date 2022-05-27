@@ -1,20 +1,19 @@
 class Solution {
 public:
     int findClosest(vector<string>& words, string word1, string word2) {
-        auto getSequences = [] (auto& words, auto pattern, auto& result) {
-          for (int i = 0; i < words.size(); i++) {
-            if (words[i] == pattern) {
-                result.push_back(i);
-            }
-          }
-          return;
-        };
-        
         vector<int> word1Seq;
         vector<int> word2Seq;
         
-        getSequences(words, word1, word1Seq);
-        getSequences(words, word2, word2Seq);
+        for (int i = 0; i < words.size(); i++) {
+            if (words[i] == word1) {
+                word1Seq.push_back(i);
+                continue;
+            } 
+            
+            if (words[i] == word2) {
+                word2Seq.push_back(i);
+            }
+        }
         
         return getMinDistance(word1Seq, word2Seq);
     }
