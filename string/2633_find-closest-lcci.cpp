@@ -18,7 +18,7 @@ public:
         return getMinDistance(word1Seq, word2Seq);
     }
     
-  
+#if 0 
     int getMinDistance(const vector<int>& seq1, const vector<int>& seq2) {
         int minDist = INT_MAX;
         
@@ -29,7 +29,23 @@ public:
         }
         return minDist;
     }
-    
+#endif    
+    int getMinDistance(const vector<int>& seq1, const vector<int>& seq2) {
+        int minDist = INT_MAX;
+        
+        for (int i = 0, j = 0; i < seq1.size() && j < seq2.size();) {
+            if (seq1[i] > seq2[j]) {
+                minDist = min(minDist, seq1[i] - seq2[j]);
+                j++;
+            } else {
+                minDist = min(minDist, seq2[j] - seq1[i]);
+                i++;
+            }
+            
+        }
+        
+        return minDist;
+    }
 
 };
 
