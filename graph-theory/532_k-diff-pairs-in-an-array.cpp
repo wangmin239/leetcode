@@ -37,18 +37,19 @@ public:
         return res.size();
     }
 };
-
 class Solution {
 public:
     int findPairs(vector<int>& nums, int k) {
         unordered_map<int, vector<int>> dataPair;
         int len = nums.size();
         
+        /* store the index */
         for (int i = 0; i < len; i++) {
             dataPair[nums[i]].push_back(i);
 
         }
         
+        /* get the count of the integral pairs meet the requirements */
         auto getCnt = [](int val, int index, unordered_map<int, vector<int>>& pairsMap) {
             if (pairsMap.count(val) == 0) {
                 return 0;
@@ -67,6 +68,7 @@ public:
             return cnt;
         };
         
+        /* the case of the K is zero */
         int ans = 0;
         if (k == 0) {
             for (const auto [_, vec] : dataPair) {
@@ -76,10 +78,15 @@ public:
             }
             return ans;
         }
-        
+        /* the case of the K is no-zero */       
+        unordered_map<int, int> isVisited;
         for (int i = 0; i < len; i++) {
             int num = nums[i];
+            if (isVisited.count(num)) {
+                continue;
+            }
             ans += getCnt(num + k, i, dataPair) + getCnt(num - k, i, dataPair);
+            isVisited[num]++;
         }
         
         return ans;
