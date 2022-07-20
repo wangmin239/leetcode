@@ -4,10 +4,10 @@ public:
         int rows = grid.size();
         int cols = grid.front().size();
         
-        unique_ptr<int> ptr(new int [rows]);
+        unique_ptr<int*> ptr = make_unique<int*>(new int [rows]);
         
         for (int cnt = 0; cnt < k; cnt++) {
-            int* pArr = ptr.get();
+            int* pArr = *ptr.get();
             
             /* The last column */
             for (int row = 0, col = cols - 1; row < rows - 1; row++) {
@@ -32,4 +32,21 @@ public:
     }
     
 
+};
+
+
+
+class Solution {
+public:
+    vector<vector<int>> shiftGrid(vector<vector<int>>& grid, int k) {
+        int m = grid.size(), n = grid[0].size();
+        vector<vector<int>> ret(m, vector<int>(n));
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                int index1 = (i * n + j + k) % (m * n);
+                ret[index1 / n][index1 % n] = grid[i][j];
+            }
+        }
+        return ret;
+    }
 };
