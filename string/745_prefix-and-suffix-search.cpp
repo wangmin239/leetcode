@@ -1,5 +1,3 @@
-
-
 struct Node
 {
     int weight;
