@@ -1,5 +1,73 @@
 class Solution {
 public:
+    int countSubarrays(vector<int> &nums, int k) {
+        int pos = find(nums.begin(), nums.end(), k) - nums.begin();
+        int n = nums.size(), cnt[n * 2];
+        fill_n(cnt, 2 * n, 0);
+        cnt[n] = 1;
+        for (int i = pos - 1, x = n; i >= 0; --i) { // 从 pos-1 开始累加 x
+            x += nums[i] < k ? 1 : -1;
+            ++cnt[x];
+        }
+
+        int ans = cnt[n] + cnt[n - 1];
+        for (int i = pos + 1, x = n; i < n; ++i) { // 从 pos+1 开始累加 x
+            x += nums[i] > k ? 1 : -1;
+            ans += cnt[x] + cnt[x - 1];
+        }
+        return ans;
+    }
+};
+
+class Solution {
+public:
+    int countSubarrays(vector<int> &nums, int k) {
+        int pos = find(nums.begin(), nums.end(), k) - nums.begin();
+        int n = nums.size(), cnt[n * 2];
+        fill(cnt, 2 * n, 0);
+        cnt[n] = 1;
+        for (int i = pos - 1, x = n; i >= 0; --i) { // 从 pos-1 开始累加 x
+            x += nums[i] < k ? 1 : -1;
+            ++cnt[x];
+        }
+
+        int ans = cnt[n] + cnt[n - 1];
+        for (int i = pos + 1, x = n; i < n; ++i) { // 从 pos+1 开始累加 x
+            x += nums[i] > k ? 1 : -1;
+            ans += cnt[x] + cnt[x - 1];
+        }
+        return ans;
+    }
+};
+
+
+class Solution {
+public:
+    int countSubarrays(vector<int> &nums, int k) {
+        int pos = find(nums.begin(), nums.end(), k) - nums.begin();
+        int n = nums.size(), cnt[n * 2];
+        memset(cnt, 0, sizeof(cnt));
+        cnt[n] = 1;
+        for (int i = pos - 1, x = n; i >= 0; --i) { // 从 pos-1 开始累加 x
+            x += nums[i] < k ? 1 : -1;
+            ++cnt[x];
+        }
+
+        int ans = cnt[n] + cnt[n - 1];
+        for (int i = pos + 1, x = n; i < n; ++i) { // 从 pos+1 开始累加 x
+            x += nums[i] > k ? 1 : -1;
+            ans += cnt[x] + cnt[x - 1];
+        }
+        return ans;
+    }
+};
+
+
+
+
+
+class Solution {
+public:
     inline int sign(int num) {
         if (num == 0) {
             return 0;
