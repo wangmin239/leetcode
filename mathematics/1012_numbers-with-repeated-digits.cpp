@@ -29,7 +29,6 @@ public:
     }
 };
 
-
 class Solution {
 public:
     int A(int x, int y) {
