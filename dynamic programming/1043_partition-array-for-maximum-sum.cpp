@@ -1,5 +1,32 @@
 class Solution {
 public:
+        int maxSumAfterPartitioning(vector<int>& arr, int k) {
+            int n = arr.size();
+            int* dp = new int[n];
+
+            fill_n(dp, n, 0);
+            int maxValue = 0;
+            for (int i = 0; i < k; i++) {
+                    maxValue = max(maxValue, arr[i]);
+                    dp[i] = maxValue * (i + 1);
+            }
+
+            for (int i = k; i < n; i++) {
+                int maxVal = 0;
+                for (int j = 0; j < k; j++) {
+                    maxVal = max(maxVal, arr[i - j]);
+                    dp[i] = max(dp[i], maxVal * (j + 1) + dp[i -j -1]);
+                }
+            }
+            int ans = dp[n - 1];
+            delete [] dp;
+            return ans;
+        }
+};
+
+
+class Solution {
+public:
     using ll = long long;
     int maxSumAfterPartitioning(vector<int>& arr, int k) {
         int n = arr.size();
