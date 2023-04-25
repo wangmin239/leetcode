@@ -1,0 +1,58 @@
+class Solution {
+public:
+    vector<string> sortPeople(vector<string>& names, vector<int>& heights) {
+        int n = names.size();
+        vector<int> indices(n);
+        iota(indices.begin(), indices.end(), 0);
+        sort(indices.begin(), indices.end(), [&](int x, int y) {
+            return heights[x] > heights[y];
+        });
+        vector<string> res(n);
+        for (int i = 0; i < n; i++) {
+            res[i] = names[indices[i]];
+        }
+        return res;
+    }
+};
+
+
+
+class Solution {
+public:
+    vector<string> sortPeople(vector<string>& names, vector<int>& heights) {
+        int n = names.size();
+        vector<pair<int, string>> heightInfo(n);
+        
+        for (int i = 0; i < n; i++) {
+            heightInfo[i] = make_pair(heights[i], names[i]);
+        }
+        
+        sort(heightInfo.begin(), heightInfo.end(), [](const auto& lhs, const auto& rhs) {
+            return lhs.first > rhs.first;
+        });
+        
+        vector<string> ans(n);
+        for (int i = 0; i < n; i++) {
+            ans[i] = move(heightInfo[i].second);
+        }
+        return ans;
+    }
+};
+
+
+class Solution {
+public:
+    vector<string> sortPeople(vector<string>& names, vector<int>& heights) {
+        map<int, string, greater<int>> heightInfo;
+        vector<string> ans(names);
+        int i = 0;
+        for (int height : heights) {
+            heightInfo[height] = names[i++];
+        }
+        i = 0;
+        for (auto [_, name] : heightInfo) {
+            ans[i++] = name;
+        }
+        return ans;
+    }
+};
