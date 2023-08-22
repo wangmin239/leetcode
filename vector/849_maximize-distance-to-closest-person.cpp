@@ -31,7 +31,18 @@ public:
         
     }
 };
-
+class Solution {
+public:
+    int maxDistToClosest(vector<int>& seats) {
+        auto f = [&](int pos) { return find(seats.cbegin() + pos, seats.cend(), 1) - seats.cbegin(); };
+        int beg = f(0), end = find(seats.crbegin(), seats.crend(), 1) - seats.crbegin();
+        int ans = max(beg, end);
+        for (int i = beg, end = seats.size() - end; i < end; beg = i, i = f(beg + 1)) {
+            ans = max(ans, (i - beg) / 2);
+        }
+        return ans;
+    }
+};
 class Solution {
 public:
     int maxDistToClosest(vector<int>& seats) {
