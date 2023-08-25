@@ -1,0 +1,53 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int goodNodes(TreeNode* root) {
+        
+        return getCnt(root, INT_MIN);
+    }
+    
+    
+    int getCnt(TreeNode* root, int maxVal) {
+        if (root == nullptr) {
+            return 0;
+        }
+        auto [val, left, right] = *root;
+        if (val >= maxVal) {
+            return getCnt(left, val) + getCnt(right, val) + 1;
+        }
+        
+        return getCnt(left, maxVal) + getCnt(right, maxVal);
+        
+    }
+};
+
+
+class Solution {
+public:
+    int dfs(TreeNode* root, int path_max) {
+        if (root == nullptr) {
+            return 0;
+        }
+        int res = 0;
+        if (root->val >= path_max) {
+            res++;
+            path_max = root->val;
+        }
+        res += dfs(root->left, path_max) + dfs(root->right, path_max);
+        return res;
+    }
+
+    int goodNodes(TreeNode* root) {
+        return dfs(root, INT_MIN);
+    }
+};
