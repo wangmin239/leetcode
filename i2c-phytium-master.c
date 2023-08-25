@@ -115,7 +115,12 @@ static void i2c_phytium_xfer_msg(struct phytium_i2c_dev *dev)
 			dev->msg_err = -EINVAL;
 			break;
 		}
-
+		/* SMBus protocl defines the first byte is the length of the message.
+		   Using I2C to emulate smbus require adding one byte.
+		 */
+		if (flags & I2C_M_RECV_LEN) {
+			msgs[dev->msg_write_idx].len = 1 + I2C_SMBUS_BLOCK_MAX;
+		}
 		if (!(dev->status & STATUS_WRITE_IN_PROGRESS)) {
 			/* new i2c_msg */
 			buf = msgs[dev->msg_write_idx].buf;
@@ -132,8 +137,7 @@ static void i2c_phytium_xfer_msg(struct phytium_i2c_dev *dev)
 		while (buf_len > 0 && tx_limit > 0 && rx_limit > 0) {
 			u32 cmd = 0;
 
-			if (dev->msg_write_idx == dev->msgs_num - 1 &&
-			    buf_len == 1 && !(flags & I2C_M_RECV_LEN))
+			if (dev->msg_write_idx == dev->msgs_num - 1 && buf_len == 1)
 				cmd |= BIT(9);
 			if (need_restart) {
 				cmd |= BIT(10);
@@ -163,7 +167,7 @@ static void i2c_phytium_xfer_msg(struct phytium_i2c_dev *dev)
 		 * I2C_FUNC_SMBUS_BLOCK_DATA case, we can't stop
 		 * the transaction here.
 		 */
-		if (buf_len > 0 || flags & I2C_M_RECV_LEN) {
+		if (buf_len > 0) {
 			/* more bytes to be written */
 			dev->status |= STATUS_WRITE_IN_PROGRESS;
 			break;
@@ -190,11 +194,16 @@ static u8 i2c_phytium_recv_len(struct phytium_i2c_dev *dev, u8 len)
 	 * Adjust the buffer length and mask the flag
 	 * after receiving the first byte.
 	 */
+	if (len > I2C_SMBUS_BLOCK_MAX) {
+		len = 0;
+	}
 	len += (flags & I2C_CLIENT_PEC) ? 2 : 1;
 	dev->tx_buf_len = len - min_t(u8, len, dev->rx_outstanding);
-	msgs[dev->msg_read_idx].len = len;
-	msgs[dev->msg_read_idx].flags &= ~I2C_M_RECV_LEN;
-
+	/* require adding one byte to trigger the i2c_phytium_xfer finishing the transaction */
+	if (dev->tx_buf_len == 0) {
+		dev->tx_buf_len = 1;
+		len = dev->rx_outstanding + 1;
+	}
 	return len;
 }
 
@@ -225,9 +234,14 @@ static void i2c_phytium_read(struct phytium_i2c_dev *dev)
 
 			*buf = phytium_readl(dev, IC_DATA_CMD);
 			/* Ensure length byte is a valid value */
-			if (flags & I2C_M_RECV_LEN &&
-				*buf <= I2C_SMBUS_BLOCK_MAX && *buf > 0) {
+			if (flags & I2C_M_RECV_LEN) {
+				msgs[dev->msg_read_idx].flags ~= I2C_M_RECV_LEN;
 				len = i2c_phytium_recv_len(dev, *buf);
+				if (*buf > I2C_SMBUS_BLOCK_MAX || *buf == 0) {
+					*buf = 0;
+					dev->msg_err = -EINVAL;
+					dev_err(dev->dev, "The value %d is out of the SMBus' length [1~32]\n", *buf);
+				}
 			}
 			buf++;
 			dev->rx_outstanding--;
