@@ -83,7 +83,7 @@ public:
             Node(int _val) : val(_val) {}
     };
     
-    void initCircle(int n, shared_ptr<Node> head) {
+    auto initCircle(int n, shared_ptr<Node>& head) {
         shared_ptr<Node> ptr = head;
         
         for (int i = 1; i <= n; i++) {
@@ -95,18 +95,22 @@ public:
             ptr->next = make_shared<Node>(i);
             ptr = ptr->next;
         }
+        /* Construct one circle, then return the last pointer */
         ptr->next = head->next;
+        return ptr;
     }
     
     
     int passThePillow(int n, int time) {
         shared_ptr<Node> head(new Node(0));
-        initCircle(n, head);
+        auto ptr = initCircle(n, head);
         shared_ptr<Node> p = head->next;
         while (time-- > 0) {
             p = p->next;         
         }
         int ans = p->val;
+        /* Destroy the circle */
+        ptr->next = nullptr;
         return ans;
     }
 };
