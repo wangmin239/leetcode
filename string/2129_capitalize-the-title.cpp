@@ -56,8 +56,8 @@ public:
             }
             
             /* append a bank to the word. */
-            if (title[i] == ' ') {
-                ans[start] = title[i];
+            if (i < len) {
+                ans[start] = ' ';
             }
         }
         return ans;
