@@ -22,18 +22,10 @@ public:
         vector<int> ans(k);
         int offset = 0;
         int n = nums.size();
-        auto curIter = nums.begin();
 
         for (int i = 0; i < k; i++) {
-            auto iter = min_element(nums.begin() + offset, nums.end());
-            offset = iter - nums.begin();
             if (n - offset > k - i) {
-                ans[i] = *iter;
-            }
-            
-            if (remain > k -
-            if (n - offset > k - i) {
-                curIter = min_element(nums.begin() + offset, nums.end());
+                auto iter = min_element(nums.begin() + offset, nums.end());
                 offset = iter - nums.begin() + 1;
                 ans[i] = *iter;
             } else if (n - offset == k - i) {
@@ -41,6 +33,7 @@ public:
                     ans[i++] = nums[offset++];
                 }
             } else {
+                /* I think the case is difficulty to make it */
                 break;
             }
         }
