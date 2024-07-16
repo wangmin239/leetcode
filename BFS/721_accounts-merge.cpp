@@ -165,6 +165,7 @@ public:
         vector<bool> isVisited(n, false);
         unordered_map<string, vector<int>> emails;
         
+        /* record the index of the every email address */
         for (int i = 0; i < n; i++) {
             for (auto iter = accounts[i].begin() + 1; iter != accounts[i].end(); ++iter) {
                 emails[*iter].push_back(i);
@@ -190,6 +191,7 @@ public:
 
         };        
     
+        /* who own the emails */
         for (auto& [email, ids] : emails) {
 
             if (usedEmails.count(email)) {
