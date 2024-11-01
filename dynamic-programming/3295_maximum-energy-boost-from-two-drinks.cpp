@@ -15,7 +15,6 @@ public:
         dp[1][A] = energyDrinkA[0] + energyDrinkA[1];
         dp[1][B] =  energyDrinkB[0] + energyDrinkB[1];
         
-        long long ans = INT_MIN;
         
         for (int i = 2; i < n; i++) {
             dp[2][A] = max(dp[1][A] + energyDrinkA[i], dp[0][B] + energyDrinkA[i]);
@@ -29,7 +28,7 @@ public:
             }
         }
         
-        return ans;
+        return max(dp[2][A], dp[2][B]);
     }
 };
 
@@ -79,5 +78,19 @@ public:
             }
         }
         return max(d[n][0], d[n][1]);
+    }
+};
+
+
+
+class Solution {
+public:
+    long long maxEnergyBoost(vector<int>& energyDrinkA, vector<int>& energyDrinkB) {
+        long long dp[3]{};
+        for (int i = 0; i < energyDrinkA.size(); i++, dp[2] = dp[0]) {
+            dp[0] = max(dp[0] + energyDrinkA[i], dp[1]);
+            dp[1] = max(dp[1] + energyDrinkB[i], dp[2]);
+        }
+        return max(dp[0], dp[1]);
     }
 };
