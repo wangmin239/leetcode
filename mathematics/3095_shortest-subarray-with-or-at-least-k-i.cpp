@@ -1,3 +1,5 @@
+
+/* First method, brute - force solution */
 class Solution {
 public:
     int minimumSubarrayLength(vector<int>& nums, int k) {
@@ -19,7 +21,7 @@ public:
     }
 };
 
-
+/* Second method, sliping window */
 class Solution {
 public:
     int minimumSubarrayLength(vector<int>& nums, int k) {
