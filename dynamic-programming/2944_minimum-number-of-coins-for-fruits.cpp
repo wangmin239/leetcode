@@ -42,3 +42,42 @@ public:
         return queue.front().second;
     }
 };
+
+
+#include <ranges>
+class Solution {
+public:
+    int minimumCoins(vector<int>& prices) {
+        deque dq{ pair{prices.size() + 1, 0} };
+        for (auto [i, p] : views::zip(views::iota(1), prices) | views::reverse) { // 下标从1开始
+            while (dq.back().first > i + i + 1) { // 弹出所有2i+1范围外的
+                dq.pop_back();
+            }
+            p += dq.back().second;
+            while (dq[0].second >= p) { // 弹出所有价格更高的
+                dq.pop_front();
+            }
+            dq.emplace_front(i, p);
+        }
+        return dq[0].second;
+    }
+};
+
+
+class Solution {
+public:
+    int minimumCoins(vector<int>& prices) {
+        int n = prices.size();
+        vector<int> dp(n + 1, INT_MAX);
+        
+        dp[0] = 0;
+        for (int i = 1; i <= n; i++) {
+            int right = min(n, i + i);
+            for (int left = i; left <= right; left++) {
+                dp[left] = min(dp[left], dp[i - 1] + prices[i - 1]);
+            }
+        }
+        
+        return dp[n];
+    }
+};
