@@ -1,3 +1,6 @@
+
+
+/* Official Solution */
 static const int MOUSE_TURN = 0, CAT_TURN = 1;
 static const int UNKNOWN = 0, MOUSE_WIN = 1, CAT_WIN = 2;
 static const int MAX_MOVES = 1000;
@@ -153,5 +156,77 @@ public:
 
     int getPos(int row, int col) {
         return row * cols + col;
+    }
+};
+
+
+/* AI Solution */
+class Solution {
+public:
+    bool canMouseWin(vector<string>& grid, int catJump, int mouseJump) {
+        int rows = grid.size();
+        int cols = grid[0].size();
+        pair<int, int> cat, mouse, food;
+        // 找到猫、老鼠和食物的初始位置
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                if (grid[i][j] == 'C') {
+                    cat = {i, j};
+                } else if (grid[i][j] == 'M') {
+                    mouse = {i, j};
+                } else if (grid[i][j] == 'F') {
+                    food = {i, j};
+                }
+            }
+        }
+        // 四个方向：上、下、左、右
+        vector<pair<int, int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        // 状态队列，存储 (老鼠位置, 猫位置, 步数, 轮到谁行动)
+        queue<tuple<pair<int, int>, pair<int, int>, int, bool>> q;
+        // 记录已经访问过的状态
+        set<tuple<pair<int, int>, pair<int, int>, int, bool>> visited;
+        q.push({mouse, cat, 0, true});
+        visited.insert({mouse, cat, 0, true});
+        while (!q.empty()) {
+            auto [mousePos, catPos, steps, isMouseTurn] = q.front();
+            q.pop();
+            // 检查是否满足游戏结束条件
+            if (mousePos == catPos || catPos == food || steps >= 1000) {
+                continue;
+            }
+            if (mousePos == food) {
+                return true;
+            }
+            int currentJump = isMouseTurn ? mouseJump : catJump;
+            auto currentPos = isMouseTurn ? mousePos : catPos;
+            // 可以选择停留在原地
+            auto newState = make_tuple(isMouseTurn ? mousePos : currentPos, isMouseTurn ? catPos : currentPos, steps + 1, !isMouseTurn);
+            if (visited.find(newState) == visited.end()) {
+                visited.insert(newState);
+                q.push(newState);
+            }
+            // 尝试向四个方向跳跃
+            for (const auto& [dx, dy] : directions) {
+                for (int jump = 1; jump <= currentJump; ++jump) {
+                    int newX = currentPos.first + dx * jump;
+                    int newY = currentPos.second + dy * jump;
+                    // 检查是否越界或碰到墙
+                    if (newX >= 0 && newX < rows && newY >= 0 && newY < cols && grid[newX][newY] != '#') {
+                        auto newPos = make_pair(newX, newY);
+                        auto newMouse = isMouseTurn ? newPos : mousePos;
+                        auto newCat = isMouseTurn ? catPos : newPos;
+                        auto newState = make_tuple(newMouse, newCat, steps + 1, !isMouseTurn);
+                        if (visited.find(newState) == visited.end()) {
+                            visited.insert(newState);
+                            q.push(newState);
+                        }
+                    } else {
+                        // 如果碰到墙，就不用再继续往这个方向跳了
+                        break;
+                    }
+                }
+            }
+        }
+        return false;
     }
 };
