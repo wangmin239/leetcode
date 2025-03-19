@@ -1,4 +1,4 @@
-/**/
+/* Original  Solution */
 class Solution {
 public:
     vector<vector<int>> findMatrix(vector<int>& nums) {
@@ -25,7 +25,8 @@ public:
     }
 };
 
-/**/
+
+/* Official Solution */
 class Solution {
 public:
     vector<vector<int>> findMatrix(vector<int>& nums) {
