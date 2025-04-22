@@ -54,68 +54,103 @@ public:
 
 
 
-#include <iostream>
-#include <vector>
-const int MOD = 1e9 + 7;
-
-// 快速幂函数，用于计算 x^y % MOD
-long long power(long long x, long long y) {
-    long long res = 1;
-    while (y > 0) {
-        if (y & 1) {
-            res = (res * x) % MOD;
+/* AI Solution */
+class Solution {
+public:
+    const int MOD = 1e9 + 7;
+    long long mod_pow(long long a, long long b, int mod) {
+        long long res = 1;
+        while (b) {
+            if (b & 1) res = res * a % mod;
+            a = a * a % mod;
+            b >>= 1;
         }
-        x = (x * x) % MOD;
-        y >>= 1;
+        return res;
     }
-    return res;
-}
 
-// 计算组合数 C(n, k) % MOD
-long long combination(int n, int k, std::vector<std::vector<long long>>& comb) {
-    if (k == 0 || k == n) {
-        return 1;
-    }
-    if (comb[n][k] != -1) {
-        return comb[n][k];
-    }
-    comb[n][k] = (combination(n - 1, k - 1, comb) + combination(n - 1, k, comb)) % MOD;
-    return comb[n][k];
-}
+    vector<long long> fact;
+    vector<long long> inv_fact;
 
-// 主函数，计算理想数组的数目
-int idealArrays(int n, int maxValue) {
-    std::vector<vector<int>> divisors(maxValue + 1);
-    // 预处理每个数的所有因子
-    for (int i = 1; i <= maxValue; ++i) {
-        for (int j = i; j <= maxValue; j += i) {
-            divisors[i].push_back(j);
+    void precompute_fact(int max_k) {
+        fact.resize(max_k + 1);
+        inv_fact.resize(max_k + 1);
+        fact[0] = 1;
+        for (int i = 1; i <= max_k; ++i) {
+            fact[i] = fact[i - 1] * i % MOD;
+        }
+        inv_fact[max_k] = mod_pow(fact[max_k], MOD - 2, MOD);
+        for (int i = max_k - 1; i >= 0; --i) {
+            inv_fact[i] = inv_fact[i + 1] * (i + 1) % MOD;
         }
     }
-    std::vector<std::vector<long long>> dp(n + 1, std::vector<long long>(maxValue + 1, 0));
-    // 初始化长度为 1 的数组，每个值都可以作为一个理想数组
-    for (int i = 1; i <= maxValue; ++i) {
-        dp[1][i] = 1;
-    }
-    // 动态规划计算长度为 2 到 n 的理想数组
-    for (int len = 2; len <= n; ++len) {
-        for (int prev = 1; prev <= maxValue; ++prev) {
-            for (int next : divisors[prev]) {
-                dp[len][next] = (dp[len][next] + dp[len - 1][prev]) % MOD;
+
+    vector<int> spf;
+
+    void sieve(int max_x) {
+        spf.resize(max_x + 1);
+        iota(spf.begin(), spf.end(), 0);
+        for (int i = 2; i * i <= max_x; ++i) {
+            if (spf[i] == i) {
+                for (int j = i * i; j <= max_x; j += i) {
+                    if (spf[j] == j) {
+                        spf[j] = i;
+                    }
+                }
             }
         }
     }
-    std::vector<std::vector<long long>> comb(n + maxValue, std::vector<long long>(n + maxValue, -1));
-    long long ans = 0;
-    // 计算最终结果
-    for (int i = 1; i <= maxValue; ++i) {
-        long long ways = 0;
-        for (int len = 1; len <= n; ++len) {
-            ways = (ways + dp[len][i] * combination(n - 1, len - 1, comb)) % MOD;
-        }
-        ans = (ans + ways) % MOD;
-    }
-    return ans;
-}
 
-    
+    vector<pair<int, int>> get_factors(int x) {
+        vector<pair<int, int>> res;
+        if (x == 1) return res;
+        while (x > 1) {
+            int p = spf[x];
+            int cnt = 0;
+            while (x % p == 0) {
+                cnt++;
+                x /= p;
+            }
+            res.emplace_back(p, cnt);
+        }
+        return res;
+    }
+
+    int idealArrays(int n, int maxValue) {
+        if (maxValue == 0) return 0;
+        
+        sieve(maxValue);
+        
+        int max_e_p = 0;
+        for (int x = 2; x <= maxValue; ++x) {
+            auto factors = get_factors(x);
+            for (auto &[p, e] : factors) {
+                if (e > max_e_p) {
+                    max_e_p = e;
+                }
+            }
+        }
+        
+        int max_k = max_e_p + n - 1;
+        precompute_fact(max_k);
+        
+        long long ans = 0;
+        for (int x = 1; x <= maxValue; ++x) {
+            auto factors = get_factors(x);
+            long long cnt = 1;
+            for (auto &[p, e] : factors) {
+                int a = e + n - 1;
+                int b = n - 1;
+                if (a < b) {
+                    cnt = 0;
+                    break;
+                }
+                long long comb = fact[a] * inv_fact[b] % MOD;
+                comb = comb * inv_fact[a - b] % MOD;
+                cnt = cnt * comb % MOD;
+            }
+            ans = (ans + cnt) % MOD;
+        }
+        
+        return ans % MOD;
+    }
+};
