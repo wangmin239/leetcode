@@ -48,10 +48,12 @@
 68 ../leetcode/backTrace/change-II.cpp
 25 ../leetcode/backTrace/subsets-ii.cpp
 69 ../leetcode/backTrace/test_class_template.cpp
+113 ../leetcode/BFS/1061_lexicographically-smallest-equivalent-string.cpp
 98 ../leetcode/BFS/1089_duplicate-zeros.cpp
 80 ../leetcode/BFS/1091_shortest-path-in-binary-matrix.cpp
 36 ../leetcode/BFS/1175_prime-arrangements.cpp
 61 ../leetcode/BFS/1263_minimum-moves-to-move-a-box-to-their-target-location.cpp
+45 ../leetcode/BFS/1298_maximum-candies-you-can-get-from-boxes.cpp
 130 ../leetcode/BFS/1380_lucky-numbers-in-a-matrix.cpp
 69 ../leetcode/BFS/1601_maximum-number-of-achievable-transfer-requests.cpp
 33 ../leetcode/BFS/1654_minimum-jumps-to-reach-home.cpp
@@ -69,6 +71,7 @@
 71 ../leetcode/BFS/2684_maximum-number-of-moves-in-a-grid.cpp
 82 ../leetcode/BFS/2850_minimum-moves-to-spread-stones-over-grid.cpp
 54 ../leetcode/BFS/3235_check-if-the-rectangle-corner-is-reachable.cpp
+42 ../leetcode/BFS/3372_maximize-the-number-of-target-nodes-after-connecting-trees-i.cpp
 19 ../leetcode/BFS/386_lexicographical-numbers.cpp
 44 ../leetcode/BFS/393_utf-8-bian-ma-yan-zheng-by-leetcode-solu-vbbf.cpp
 181 ../leetcode/BFS/417_pacific-atlantic-water-flow.cpp
@@ -231,6 +234,7 @@
 71 ../leetcode/graph-theory/1761_minimum-degree-of-a-connected-trio-in-a-graph.cpp
 76 ../leetcode/graph-theory/1782_count-pairs-of-nodes.cpp
 74 ../leetcode/graph-theory/1791_find-center-of-star-graph.cpp
+57 ../leetcode/graph-theory/1857_largest-color-value-in-a-directed-graph.cpp
 111 ../leetcode/graph-theory/1971_find-if-path-exists-in-graph.cpp
 38 ../leetcode/graph-theory/1976_number-of-ways-to-arrive-at-destination.cpp
 73 ../leetcode/graph-theory/2006_count-number-of-pairs-with-absolute-difference-k.cpp
@@ -239,6 +243,7 @@
 117 ../leetcode/graph-theory/207_course-schedule.cpp
 179 ../leetcode/graph-theory/2127_maximum-employees-to-be-invited-to-a-meeting.cpp
 75 ../leetcode/graph-theory/2352_equal-row-and-column-pairs.cpp
+27 ../leetcode/graph-theory/2359_find-closest-node-to-given-two-nodes.cpp
 108 ../leetcode/graph-theory/2385_amount-of-time-for-binary-tree-to-be-infected.cpp
 138 ../leetcode/graph-theory/2542_alien_order.cpp
 117 ../leetcode/graph-theory/2569_handling-sum-queries-after-update.cpp
@@ -304,6 +309,7 @@
 108 ../leetcode/Greedy-algorithm/2028_find-missing-observations.cpp
 21 ../leetcode/Greedy-algorithm/2029_stone-game-IX.cpp
 17 ../leetcode/Greedy-algorithm/2038_remove-colored-pieces-if-both-neighbors-are-the-same-color.cpp
+66 ../leetcode/Greedy-algorithm/2131_longest-palindrome-by-concatenating-two-letter-words.cpp
 71 ../leetcode/Greedy-algorithm/2178_maximum-split-of-positive-even-integers.cpp
 60 ../leetcode/Greedy-algorithm/2244_minimum-rounds-to-complete-all-tasks.cpp
 41 ../leetcode/Greedy-algorithm/2389_longest-subsequence-with-limited-sum.cpp
@@ -328,12 +334,16 @@
 124 ../leetcode/Greedy-algorithm/2931_maximum-spending-after-buying-items.cpp
 44 ../leetcode/Greedy-algorithm/2938_separate-black-and-white-balls.cpp
 53 ../leetcode/Greedy-algorithm/3011_find-if-array-can-be-sorted.cpp
+60 ../leetcode/Greedy-algorithm/3068_find-the-maximum-sum-of-node-values.cpp
 116 ../leetcode/Greedy-algorithm/3086_minimum-moves-to-pick-k-ones.cpp
 15 ../leetcode/Greedy-algorithm/3096_minimum-levels-to-gain-more-points.cpp
 39 ../leetcode/Greedy-algorithm/3111_minimum-rectangles-to-cover-points.cpp
 47 ../leetcode/Greedy-algorithm/3191_minimum-operations-to-make-binary-array-elements-equal-to-one-i.cpp
 45 ../leetcode/Greedy-algorithm/3219_minimum-cost-for-cutting-cake-ii.cpp
 54 ../leetcode/Greedy-algorithm/334_increasing-triplet-subsequence.cpp
+53 ../leetcode/Greedy-algorithm/3355_zero-array-transformation-i.cpp
+73 ../leetcode/Greedy-algorithm/3356_zero-array-transformation-ii.cpp
+71 ../leetcode/Greedy-algorithm/3362_zero-array-transformation-iii.cpp
 71 ../leetcode/Greedy-algorithm/517_super-washing-machines.cpp
 119 ../leetcode/Greedy-algorithm/539_minimum-time-difference.cpp
 27 ../leetcode/Greedy-algorithm/672_bulb-switcher-ii.cpp
@@ -479,6 +489,7 @@
 42 ../leetcode/mathematics/2859_sum-of-values-at-indices-with-k-set-bits.cpp
 20 ../leetcode/mathematics/2860_happy-students.cpp
 78 ../leetcode/mathematics/2873_maximum-value-of-an-ordered-triplet-i.cpp
+45 ../leetcode/mathematics/2894_divisible-and-non-divisible-sums-difference.cpp
 48 ../leetcode/mathematics/2917_find-the-k-or-of-an-array.cpp
 75 ../leetcode/mathematics/2918_minimum-equal-sum-of-two-arrays-after-replacing-zeros.cpp
 29 ../leetcode/mathematics/2951_find-the-peaks.cpp
@@ -586,6 +597,7 @@
 16 ../leetcode/sliding-window/2845_count-of-interesting-subarrays.cpp
 54 ../leetcode/sliding-window/2962_count-subarrays-where-max-element-appears-at-least-k-times.cpp
 32 ../leetcode/sliding-window/3392_count-subarrays-of-length-three-with-a-condition.cpp
+74 ../leetcode/sliding-window/3403_find-the-lexicographically-largest-string-from-the-box-i.cpp
 203 ../leetcode/sliding-window/75_sort-colors.cpp
 94 ../leetcode/stack/1019_next-greater-node-in-linked-list.cpp
 119 ../leetcode/stack/1096_brace-expansion-ii.cpp
@@ -597,6 +609,7 @@
 21 ../leetcode/stack/1944_number-of-visible-people-in-a-queue.cpp
 39 ../leetcode/stack/1996_the-number-of-weak-characters-in-the-game.cpp
 161 ../leetcode/stack/227_basic-calculator.cpp
+26 ../leetcode/stack/2434_using-a-robot-to-print-the-lexicographically-smallest-string.cpp
 69 ../leetcode/stack/2454_next-greater-element-iv.cpp
 105 ../leetcode/stack/2908_minimum-sum-of-mountain-triplets-i.cpp
 58 ../leetcode/stack/3174_clear-digits.cpp
