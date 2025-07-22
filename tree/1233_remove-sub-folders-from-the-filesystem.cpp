@@ -92,3 +92,69 @@ public:
         return ans;
     }
 };
+
+
+
+
+
+
+
+
+/* Original Solution 2 */
+/* using smart pointer to automatic destruction */
+class Trie {
+public:
+    bool isEnd;
+    unordered_map<string, shared_ptr<Trie>> path;
+    Trie() : isEnd(false) {
+        
+    }
+
+};
+
+
+class Solution {
+public:
+    vector<string> removeSubfolders(vector<string>& folder) {
+        shared_ptr<Trie> root(new Trie);
+
+        for (const auto& dir : folder) {
+            int len = dir.length();
+            auto node = root;
+
+            for (int start = 1, end = 1; end < len; end++) {
+                if (end == len - 1 || dir[end] == '/') {
+                    int dirLen = (end == len - 1) ? end - start + 1 : end - start;
+                    string subDir(dir.substr(start, dirLen));
+
+                    if (node->path.count(subDir) == 0) {
+                            node->path[subDir] = make_shared<Trie>(Trie());
+                    }
+                    node = node->path[subDir];
+                    start = end + 1;
+                }
+            }
+            node->isEnd = true;
+        }
+
+        vector<string> ans;
+
+        function<void(shared_ptr<Trie>&, string&&)> dfs =[&](shared_ptr<Trie>& node, string&& parent) {
+            auto dirs = node->path;
+
+            for (auto& [subDir, subNode]: dirs) {
+                if (subNode->isEnd == true) {
+                    ans.push_back(parent + "/" + subDir);
+                    continue;
+                }
+                dfs(subNode, parent + "/" + subDir);
+            }
+
+        };
+
+
+        dfs(root,  "");
+        return ans;
+    }
+};
+
