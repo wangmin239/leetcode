@@ -27,6 +27,25 @@ public:
     }
 };
 
+/* Original solution 2 */
+class Solution {
+public:
+    vector<vector<int>> generate(int numRows) {
+        vector<vector<int>> ans{{1}};
+        
+        for (int curRow = 2; curRow <= numRows; curRow++) {
+            vector<int> curLay(curRow, 1);
+            int i = 1;
+            
+            for (auto iter = ans.back().begin(); iter != ans.back().end() - 1; ++iter) {
+                curLay[i++] = *iter + *(iter + 1);
+            }
+            ans.push_back(move(curLay));
+        }
+        
+        return ans;
+    }
+};
 
 /* Official Solution 1 */
 class Solution {
