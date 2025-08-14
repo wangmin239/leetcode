@@ -7,17 +7,20 @@ public:
                 return true;
             }
             const int upLimit = 15;
-            bool ans = false;
             for (int i = exponent; i < upLimit; i++) {
                 int curVal =  static_cast<int>(pow(3, i));
-                if (curVal <= value) {
-                    ans |= dfs(value - curVal, i + 1);
-                } else {
+                int nextVal = value - curVal;
+                
+                if (nextVal < 0) {
                     break;
+                }
+                
+                if (dfs(nextVal, i + 1) == true) {
+                    return true;
                 }
             }
             
-            return ans;
+            return false;
         };
                     
         return dfs(n, 0); 
@@ -60,6 +63,40 @@ public:
                 
         
         return sumSet.count(n);
+    }
+};
+
+
+/* Original Solution 3 */
+class Solution {
+public:
+    bool checkPowersOfThree(int n) {
+        unordered_map<int, bool> sumSet;
+        function<bool(int, int)> dfs = [&](int value, int exponent) {
+            if (value == 0) {
+                return true;
+            }
+            const int upLimit = 15;
+            for (int i = exponent; i < upLimit; i++) {
+                int curVal =  static_cast<int>(pow(3, i));
+                int nextVal = value - curVal;
+                if (nextVal < 0) {
+                    break;
+                }
+                
+                if (sumSet.count(nextVal) == 0) {
+                    sumSet.emplace(nextVal, dfs(nextVal, i + 1));
+                }
+
+                if (sumSet[nextVal] == true) {
+                    return true;
+                }
+            }
+            
+            return false;
+        };
+                    
+        return dfs(n, 0); 
     }
 };
 
