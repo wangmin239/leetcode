@@ -60,3 +60,31 @@ public:
         return res;
     }
 };
+
+/* Original Solution 1 */
+class Solution {
+public:
+    string largestGoodInteger(string num) {
+        int len = num.length();
+        string ans;
+        const int subLen = 3;
+        
+        for (int left = 0, right = 0; right < len; right++) {
+            /* Get the substring contains the same character */
+            while (right < len && num[left] == num[right]) {
+                right++;
+            }
+            
+            /* calculate the length */
+            if (right - left >= subLen) {
+                string tmp(subLen, num[left]);
+                ans = max(ans, tmp);
+            }
+            /* update the left index */
+            left = right;
+        }
+                
+        return ans;
+        
+    }
+};
