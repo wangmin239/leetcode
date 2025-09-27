@@ -29,19 +29,26 @@ public:
 class Solution {
 public:
     int triangleNumber(vector<int>& nums) {
-        int n = nums.size();
+        int sum = 0;
+        int len = nums.size();
+
         sort(nums.begin(), nums.end());
-        int ans = 0;
-        for (int i = 0; i < n; ++i) {
-            int k = i + 1;
-            for (int j = i + 1; j < n; ++j) {
-                while (k + 1 < n && nums[k + 1] < nums[i] + nums[j]) {
+
+        for (int i = 0; i < len - 2; i++) {
+            int k = i + 2;
+
+            for (int j = i + 1; j < len - 1; j++) {
+                while (k < len && nums[k] < nums[i] + nums[j]) {
                     ++k;
                 }
-                ans += max(k - j, 0);
+
+                sum += max(k - j - 1, 0);
+
             }
         }
-        return ans;
+
+
+        return sum;
     }
 };
 
@@ -51,53 +58,59 @@ class Solution {
 public:
     int triangleNumber(vector<int>& nums) {
         map<int, int> digits;
-        auto checkValid = [](const int& a, const int& b, const int& c) {
-            return a + b > c;
-        };
-        
-    
+        vector<int> lenVec;
+        int sum = 0;
+        int len;
+
         for (int num : nums) {
             ++digits[num];
         }
-        
-        int sum = 0;
-        int len = digits.size();
-        vector<int> lenVec(len, 0);
-        int i = 0;
-        
-        for (const auto& [aLen, cnt] : digits) { 
+
+        /* equilateral triangle */
+        for (const auto& [aLen, cnt] : digits) {
             if (cnt > 2 && aLen != 0) {
                 sum += cnt * (cnt - 1) * (cnt - 2) / 6;
             }
-            lenVec[i++] = aLen;
+            if (aLen != 0) {
+                lenVec.push_back(aLen);
+            }
         }
 
-        for (const auto& [aLen, aCnt] : digits) {
-            for (const auto& [bLen, bCnt] : digits) {
-                if (aCnt > 1 && aLen != bLen) {
-                    if (aLen < bLen && checkValid(aLen, aLen, bLen) == true ||
-                        (aLen > bLen && checkValid(bLen, aLen, aLen) == true)) {
-                            sum += aCnt * (aCnt - 1) * bCnt / 2;
-                    }
-                }
+        len = lenVec.size();
+        /* isosceles triangle */
+        for (int ia = 0, ib = 1, cnt = 0; ia < len; ia++) {
+            while (ib < len && lenVec[ia] * 2 > lenVec[ib]) {
+                cnt += digits[lenVec[ib]];
+                ++ib;
+            }
+
+            sum += digits[lenVec[ia]] * (digits[lenVec[ia]] - 1) * cnt / 2;
+            cnt += digits[lenVec[ia]];
+
+            if (ia + 1 < len) {
+                cnt -= digits[lenVec[ia + 1]];
             }
         }
 
         for (int ia = 0; ia < len - 2; ia++) {
-            for (int ib = ia + 1; ib < len - 1; ib++) {                 
-                for (int ic= ib + 1; ic < len; ic++) {
-                    int aLen = lenVec[ia];
-                    int bLen = lenVec[ib];
-                    int cLen = lenVec[ic];
-                    if (checkValid(aLen, bLen, cLen) == true) {
-                        sum += digits[aLen] * digits[bLen] * digits[cLen];
-                    } else {
-                        break;
+            int ic = ia + 2;
+            int cnt = 0;
+
+            for (int ib = ia + 1; ib < len - 1; ib++) {
+                while (ic < len && lenVec[ic] < lenVec[ia] + lenVec[ib]) {
+                    if (ic > ib) {
+                        cnt += digits[lenVec[ic]];
                     }
+                    ++ic;
                 }
-                
+
+                if (ic > ib + 1) {
+                    sum += digits[lenVec[ia]] * digits[lenVec[ib]] * cnt;
+                    cnt -= digits[lenVec[ib + 1]];
+                }
             }
         }
+
         return sum;
     }
 };
