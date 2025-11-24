@@ -99,3 +99,49 @@ public:
     }
 };
 
+/* Original Solution 1 */
+class Solution {
+public:
+    int maxSumDivThree(vector<int>& nums) {
+        int n = nums.size();
+        const int divisor = 3;
+        vector<int> arr(divisor, 0);
+
+        for (int num : nums) {
+            int mod = num % divisor;
+            vector<int> cur(arr);
+            if (mod == 0) {
+                cur[0] = arr[0] + num;
+
+                if (arr[1] != 0) {
+                   cur[1] = arr[1] + num;
+                }
+                if (arr[2] != 0) {
+                    cur[2] = arr[2] + num;
+                }
+            } else if (mod == 1) {
+                cur[1] = max(arr[1], arr[0] + num);
+
+                if (arr[1] != 0) {
+                    cur[2] = max(arr[2], arr[1] + num);
+                }
+
+                if (arr[2] != 0) {
+                    cur[0] = max(arr[0], arr[2] + num);
+                }
+
+            } else {
+                cur[2] = max(arr[2], arr[0] + num);
+                if (arr[2] != 0) {
+                    cur[1] = max(arr[1], arr[2] + num);
+                }
+                if (arr[1] != 0) {
+                    cur[0] = max(arr[0], arr[1] + num);
+                }
+            }
+            arr = move(cur);
+        }
+
+        return arr[0];
+    }
+};
