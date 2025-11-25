@@ -1,24 +1,71 @@
+/* Original Solution 1 */
 class Solution {
 public:
     int smallestRepunitDivByK(int k) {
-        // 若 k 能被 2 或 5 整除，则无解，返回 -1
-        if (k % 2 == 0 || k % 5 == 0) {
-            return -1;
+        unordered_set<int> remainderSet;
+        int initVal = 0;
+        int len = 0;
+        const int multiple = 10;
+        
+        auto getInitVal = [](int k, int& len) {
+            int val = 0;
+            
+            while (k != 0) {
+                val = multiple * val + 1;
+                k /= multiple;
+                ++len;
+            }
+            return val;
         }
-        // 初始化余数为 1，表示一个数的最低位是 1
-        int resid = 1 % k, len = 1;
-        // 若余数不为 0，继续迭代
-        while (resid != 0) {
-            // 计算下一个数的余数，下一个数在当前余数后加一个 1
-            resid = (resid * 10 + 1) % k;
-            len++;
+
+        initVal = getInitVal(k, len);
+        int mod = initVal % k;
+        while (mod % k != 0 && remainderSet.count(mod) == 0) {
+            remainderSet.insert(mod);
+            ++len;
+            
+            mod = multiple *  mod + 1;
+            mod = mod % k;
         }
-        // 返回数字 1 的最小重复次数
-        return len;
+        
+        if (mod % k == 0) {
+            return len;
+        }
+        
+        return -1;
     }
 };
 
 
+
+
+/* Original Solution 2 */
+class Solution {
+public:
+    int smallestRepunitDivByK(int k) {
+        int len = 1;
+        unordered_set<int> remainderSet;
+        int mod = 1;
+        const int multiple = 10;
+
+        while (mod % k != 0 && remainderSet.count(mod) == 0) {
+            remainderSet.insert(mod);
+            ++len;
+            
+            mod = multiple *  mod + 1;
+            mod = mod % k;
+        }
+        
+        if (mod % k == 0) {
+            return len;
+        }
+        
+        return -1;
+    }
+};
+
+
+/* Official Solution 1 */
 class Solution {
 public:
     int smallestRepunitDivByK(int k) {
@@ -34,5 +81,80 @@ public:
             st.insert(resid); // 将余数插入集合
         }
         return len; // 返回数字长度
+    }
+};
+
+
+/* Official Solution 2 */
+class Solution {
+public:
+    int smallestRepunitDivByK(int k) {
+        if (k % 2 == 0 || k % 5 == 0) {
+            return -1;
+        }
+        int x = 1 % k;
+        for (int i = 1; ; i++) { // 一定有解
+            if (x == 0) {
+                return i;
+            }
+            x = (x * 10 + 1) % k;
+        }
+    }
+};
+
+
+/* Official Solution 3 */
+class Solution {
+    // 计算欧拉函数（n 以内的与 n 互质的数的个数）
+    int phi(int n) {
+        int res = n;
+        for (int i = 2; i * i <= n; i++) {
+            if (n % i == 0) {
+                res = res / i * (i - 1);
+                while (n % i == 0) {
+                    n /= i;
+                }
+            }
+        }
+        if (n > 1) {
+            res = res / n * (n - 1);
+        }
+        return res;
+    }
+
+    // 快速幂，返回 pow(x, n) % mod
+    long long pow(long long x, int n, long long mod) {
+        long long res = 1;
+        for (; n; n /= 2) {
+            if (n % 2) {
+                res = res * x % mod;
+            }
+            x = x * x % mod;
+        }
+        return res;
+    }
+
+public:
+    int smallestRepunitDivByK(int k) {
+        if (k % 2 == 0 || k % 5 == 0) {
+            return -1;
+        }
+
+        int m = phi(k * 9);
+
+        // 从小到大枚举不超过 sqrt(m) 的因子
+        int i = 1;
+        for (; i * i <= m; i++) {
+            if (m % i == 0 && pow(10, i, k * 9) == 1) {
+                return i;
+            }
+        }
+
+        // 从小到大枚举不低于 sqrt(m) 的因子
+        for (i--; ; i--) {
+            if (m % i == 0 && pow(10, m / i, k * 9) == 1) {
+                return m / i;
+            }
+        }
     }
 };
