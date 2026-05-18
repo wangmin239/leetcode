@@ -8,7 +8,7 @@ public:
 
         auto dfs = [&](int pos, auto&& self) -> bool {
 
-            if (pos < 0 || pos >= n || visited[pos] == true) {
+            if (pos < 0 || pos >= n) {
                 return false;
             }
 
