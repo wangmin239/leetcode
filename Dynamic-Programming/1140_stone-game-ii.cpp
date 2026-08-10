@@ -65,3 +65,38 @@ public:
 
 
 
+/* Original Solution 1 */
+class Solution {
+public:
+    int stoneGameII(vector<int>& piles) {
+        int n = piles.size();
+        int m = 1;
+
+        auto dfs = [&](int pos, int curM, auto&& self) {
+
+            if (n - pos <= 2 * curM) {
+                return accumulate(piles.begin() + pos, piles.end(), 0);
+            }
+
+            int diff =  INT_MIN;
+            int curSum = 0;
+
+            for (int x = 1; x <= 2 * curM; x++) {
+                curSum += piles[pos + x - 1];
+                diff = max(diff, curSum - self(pos + x, max(x, curM), self));
+            }
+
+            return diff;
+        };
+
+        int sum = accumulate(piles.begin(), piles.end(), 0);
+
+        sum += dfs(0, 1, dfs);
+
+        return sum / 2;
+    }
+};
+
+
+
+
