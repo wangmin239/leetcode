@@ -23,15 +23,6 @@ public:
     }
 };
 
-
-
-
-
-
-
-
-
-
 class Solution {
 public:
     int countServers(vector<vector<int>>& grid) {
@@ -62,6 +53,37 @@ public:
                 }
             }
         } 
+        return cnt;
+    }
+};
+
+/* Original Solution 1 */
+class Solution {
+public:
+    int countServers(vector<vector<int>>& grid) {
+        int rows = grid.size();
+        int cols = grid.front().size();
+        vector<int> rowServer(rows);
+        int cnt = 0;
+
+        for (int i = 0; i < rows; i++) {
+            int rowSum = accumulate(grid[i].begin(), grid[i].end(), 0);
+
+            cnt += rowSum > 1 ? rowSum : 0;
+            rowServer[i] = rowSum > 1 ? 1 : 0;
+        }
+
+        for (int i = 0; i < cols; i++) {
+            int colSum = 0;
+            int overlapCnt = 0;
+
+            for (int j = 0; j < rows; j++) {
+                colSum += grid[j][i];
+                overlapCnt += grid[j][i] & rowServer[j];
+            }
+            cnt += colSum > 1 ? colSum - overlapCnt : 0;
+        }
+
         return cnt;
     }
 };
